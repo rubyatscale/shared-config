@@ -1,0 +1,14 @@
+name: 'Close stale issues and PRs'
+
+on:
+  workflow_call:
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          stale-issue-message: 'This issue has been marked stale because it has been open for six months with no activity. To prevent this issue from automatically being closed in one week, update it or remove the stale label.'
+          stale-pr-message: 'This PR has been marked stale because it has been open for six months with no activity. To prevent this PR from automatically being closed in one week, update it or remove the stale label.'
+          days-before-stale: 180
+          days-before-close: 7
