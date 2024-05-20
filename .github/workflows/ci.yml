@@ -6,6 +6,7 @@ on:
       test-command:
         description: 'The command to run tests'
         required: false
+        type: string
         default: 'bundle exec rspec'
 jobs:
   run_tests:
