@@ -2,8 +2,13 @@ name: CI
 
 on:
   workflow_call:
+    inputs:
+      test-command:
+        description: 'The command to run tests'
+        required: false
+        default: 'bundle exec rspec'
 jobs:
-  rspec:
+  run_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -13,7 +18,7 @@ jobs:
           - 3.3
     env:
       BUNDLE_GEMFILE: Gemfile
-    name: "RSpec tests: Ruby ${{ matrix.ruby }}"
+    name: "Run tests: Ruby ${{ matrix.ruby }}"
     steps:
       - uses: actions/checkout@v4
       - name: Install ripgrep
@@ -24,7 +29,7 @@ jobs:
           bundler-cache: true
           ruby-version: ${{ matrix.ruby }}
       - name: Run tests
-        run: bundle exec rspec
+        run: ${{ inputs.test-command }}
   static_type_check:
     name: "Type Check"
     runs-on: ubuntu-latest
@@ -51,7 +56,7 @@ jobs:
         run: bundle exec rubocop
   notify_on_failure:
     runs-on: ubuntu-latest
-    needs: [rspec, static_type_check, rubocop]
+    needs: [run_tests, static_type_check, rubocop]
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
