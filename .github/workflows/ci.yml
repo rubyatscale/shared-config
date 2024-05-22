@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: 'bundle exec rspec'
+      linter-command:
+        description: 'The command to run the linter'
+        required: false
+        type: string
+        default: 'bundle exec rubocop'
 jobs:
   run_tests:
     runs-on: ubuntu-latest
@@ -43,9 +48,9 @@ jobs:
           ruby-version: 3.3
       - name: Run static type checks
         run: bundle exec srb tc
-  rubocop:
+  run_linter:
     runs-on: ubuntu-latest
-    name: Rubocop
+    name: "Linter"
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby
@@ -53,8 +58,8 @@ jobs:
         with:
           bundler-cache: true
           ruby-version: 3.3
-      - name: Run style checks
-        run: bundle exec rubocop
+      - name: Run linter
+        run: ${{ inputs.linter-command }}
   notify_on_failure:
     runs-on: ubuntu-latest
     needs: [run_tests, static_type_check, rubocop]
