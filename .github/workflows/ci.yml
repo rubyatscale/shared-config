@@ -28,6 +28,8 @@ jobs:
     name: "Run tests: Ruby ${{ matrix.ruby }}"
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install ripgrep
         run: sudo apt-get install -y ripgrep
       - name: Set up Ruby ${{ matrix.ruby }}
@@ -36,12 +38,15 @@ jobs:
           bundler-cache: true
           ruby-version: ${{ matrix.ruby }}
       - name: Run tests
+        # zizmor: ignore[template-injection] workflow_call inputs are controlled by the caller
         run: ${{ inputs.test-command }}
   static_type_check:
     name: "Type Check"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -54,12 +59,15 @@ jobs:
     name: "Linter"
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: 3.4
       - name: Run linter
+        # zizmor: ignore[template-injection] workflow_call inputs are controlled by the caller
         run: ${{ inputs.linter-command }}
   notify_on_failure:
     runs-on: ubuntu-latest
