@@ -23,3 +23,5 @@ jobs:
 
       - name: Run zizmor
         uses: zizmorcore/zizmor-action@v0.5.3
+        with:
+          config: .zizmor.yml
