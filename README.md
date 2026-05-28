@@ -10,7 +10,7 @@ These workflows are called from individual gem repos via `uses: rubyatscale/shar
 
 | Workflow | Description |
 |----------|-------------|
-| **CI** (`ci.yml`) | Runs tests across Ruby 3.2–4.0, Sorbet type checking, and linting (RuboCop). Test and linter commands are configurable via inputs. |
+| **CI** (`ci.yml`) | Runs tests across Ruby 3.3–4.0, Sorbet type checking, and linting (RuboCop). Test and linter commands are configurable via inputs. |
 | **CD** (`cd.yml`) | Publishes the gem to RubyGems and creates a GitHub Release on successful main builds. |
 | **Stale** (`stale.yml`) | Marks issues and PRs as stale after 180 days of inactivity, then closes them after 7 more days. |
 | **Triage** (`triage.yml`) | Labels new issues with `triage`. |
