@@ -32,7 +32,7 @@ jobs:
       - name: Install ripgrep
         run: sudo apt-get install -y ripgrep
       - name: Set up Ruby ${{ matrix.ruby }}
-        uses: ruby/setup-ruby@0cb964fd540e0a24c900370abf38a33466142735 # v1
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           bundler-cache: true
           ruby-version: ${{ matrix.ruby }}
@@ -47,7 +47,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Ruby
-        uses: ruby/setup-ruby@0cb964fd540e0a24c900370abf38a33466142735 # v1
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           bundler-cache: true
           ruby-version: 3.4
@@ -61,7 +61,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Ruby
-        uses: ruby/setup-ruby@0cb964fd540e0a24c900370abf38a33466142735 # v1
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           bundler-cache: true
           ruby-version: 3.4
