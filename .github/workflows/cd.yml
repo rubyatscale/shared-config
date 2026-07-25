@@ -7,9 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v6
-        with:
-          persist-credentials: false
+      # persisted credentials are required here - discourse/publish-rubygems-action's entrypoint.sh runs
+      # `rake release`, which does a raw `git push` and never re-authenticates from GITHUB_TOKEN itself; it
+      # relies entirely on the credential this checkout step leaves behind. Disabling persistence breaks every
+      # deploy with "fatal: could not read Username for 'https://github.com'".
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0 # zizmor: ignore[artipacked] persisted credentials required for the git push in "Tag and Push Gem" below
       - name: Tag and Push Gem
         id: tag-and-push-gem
         uses: discourse/publish-rubygems-action@4bd305c65315cb691bad1e8de97a87aaf29a0a85 # v3
@@ -29,7 +31,7 @@ jobs:
     needs: [deploy]
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
-      - uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3
+      - uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
