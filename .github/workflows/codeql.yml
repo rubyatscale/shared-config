@@ -1,14 +1,12 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: '30 1 * * 0'
+  workflow_call:
+    inputs:
+      languages:
+        description: 'JSON array of CodeQL languages to analyze, e.g. ["actions","ruby"]'
+        required: true
+        type: string
 
 jobs:
   analyze:
@@ -22,9 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - language: actions
-            build-mode: none
+        language: ${{ fromJSON(inputs.languages) }}
 
     steps:
       - name: Checkout repository
@@ -36,7 +32,7 @@ jobs:
         uses: github/codeql-action/init@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
         with:
           languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          build-mode: none
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
