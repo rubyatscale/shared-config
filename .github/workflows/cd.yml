@@ -11,7 +11,9 @@ jobs:
       # `rake release`, which does a raw `git push` and never re-authenticates from GITHUB_TOKEN itself; it
       # relies entirely on the credential this checkout step leaves behind. Disabling persistence breaks every
       # deploy with "fatal: could not read Username for 'https://github.com'".
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.0 # zizmor: ignore[artipacked] persisted credentials required for the git push in "Tag and Push Gem" below
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: # zizmor: ignore[artipacked] persisted credentials required for the git push in "Tag and Push Gem" below
+          persist-credentials: true
       - name: Tag and Push Gem
         id: tag-and-push-gem
         uses: discourse/publish-rubygems-action@4bd305c65315cb691bad1e8de97a87aaf29a0a85 # v3
