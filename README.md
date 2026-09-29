@@ -14,12 +14,13 @@ These workflows are called from individual gem repos via `uses: rubyatscale/shar
 | **CD** (`cd.yml`) | Publishes the gem to RubyGems and creates a GitHub Release on successful main builds. |
 | **Stale** (`stale.yml`) | Marks issues and PRs as stale after 180 days of inactivity, then closes them after 7 more days. |
 | **Triage** (`triage.yml`) | Labels new issues with `triage`. |
+| **zizmor** (`zizmor.yml`) | Runs the [zizmor](https://github.com/zizmorcore/zizmor) security linter against the calling repo's workflows, actions, and Dependabot config. |
 
 ### Repository workflows
 
 | Workflow | Description |
 |----------|-------------|
-| **zizmor** (`zizmor.yml`) | Runs the [zizmor](https://github.com/zizmorcore/zizmor) security linter against all workflow files on every push and PR. |
+| **zizmor self-scan** (`zizmor-self-scan.yml`) | Runs `zizmor.yml` against this repo on every push and PR. |
 
 ## Usage
 
@@ -45,6 +46,36 @@ jobs:
 |-------|---------|-------------|
 | `test-command` | `bundle exec rspec` | Command to run tests |
 | `linter-command` | `bundle exec rubocop` | Command to run the linter |
+
+### zizmor
+
+By default the results go to the repository's Security tab, and the job passes whatever zizmor finds. To make zizmor a required check, set `advanced-security: false`: findings are then reported as annotations and fail the job. The job takes its permissions from the caller.
+
+```yaml
+# .github/workflows/zizmor.yml
+name: zizmor
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  zizmor:
+    permissions:
+      contents: read
+    uses: rubyatscale/shared-config/.github/workflows/zizmor.yml@main # zizmor: ignore[unpinned-uses] internal reusable workflow tracked at @main by convention
+    with:
+      advanced-security: false
+```
+
+With the default `advanced-security: true`, grant `actions: read` and `security-events: write` as well.
+
+| Input | Default | Description |
+|-------|---------|-------------|
+| `advanced-security` | `true` | Upload results to the Security tab (`true`), or annotate and fail on findings (`false`) |
 
 ### Required secrets
 
