@@ -13,8 +13,8 @@ on:
         default: true
 
 jobs:
-  # No permissions block, so the job gets the caller's: contents: read, plus actions: read and
-  # security-events: write when advanced-security is true.
+  # No permissions block, so the job gets the caller's. Callers should grant contents: read, plus
+  # security-events: write (and actions: read in a private repo) when advanced-security is true.
   zizmor:
     name: zizmor
     runs-on: ubuntu-latest
